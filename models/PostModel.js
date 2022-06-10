@@ -15,12 +15,7 @@ const PostSchema = new mongoose.Schema({
     required: true,
   },
   likes: {
-    type: [
-      {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "users",
-      },
-    ],
+    type: [String],
   },
   uploadedOn: {
     type: Date,

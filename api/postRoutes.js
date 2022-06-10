@@ -3,14 +3,14 @@ const tokenVerification = require("../middlewares/tokenVerification");
 const postJoiValidation = require("../validations/postJoiValidation");
 const posts = require("../models/PostModel");
 
-router.get("/posts/get-all", (req, res) => {
+router.get("/post/get-all", (req, res) => {
   posts.find((err, doc) => {
     if (err) return res.status(500).send({ message: "Something went wrong." });
     res.status(200).send({ message: "All posts fetched.", data: doc });
   });
 });
 
-router.post("/posts/new", tokenVerification, async (req, res) => {
+router.post("/post/new", tokenVerification, async (req, res) => {
   try {
     const { error } = postJoiValidation(req.body);
     if (error)
@@ -28,7 +28,7 @@ router.post("/posts/new", tokenVerification, async (req, res) => {
   }
 });
 
-router.delete("/posts/delete", tokenVerification, (req, res) => {
+router.delete("/post/delete", tokenVerification, (req, res) => {
   const postID = req.body.postID;
   if (!postID) return res.status(300).send({ message: "Post not found." });
   posts.findOneAndDelete(
@@ -37,6 +37,36 @@ router.delete("/posts/delete", tokenVerification, (req, res) => {
       if (err)
         return res.status(500).send({ message: "Something went wrong." });
       res.status(200).send({ message: "Post deleted successfully." });
+    }
+  );
+});
+
+router.patch("/post/like", tokenVerification, (req, res) => {
+  const postID = req.body.postID;
+  if (!postID) return res.status(404).send({ message: "Post not found." });
+  posts.findOneAndUpdate(
+    { _id: postID },
+    { $addToSet: { likes: req.user } },
+    { new: true },
+    (err, doc) => {
+      if (err)
+        return res.status(500).send({ message: "Something went wrong." });
+      res.status(200).send({ message: "Post liked.", data: doc });
+    }
+  );
+});
+
+router.patch("/post/remove-like", tokenVerification, (req, res) => {
+  const postID = req.body.postID;
+  if (!postID) return res.status(404).send({ message: "Post not found." });
+  posts.findOneAndUpdate(
+    { _id: postID },
+    { $pull: { likes: req.user } },
+    { new: true },
+    (err, doc) => {
+      if (err)
+        return res.status(500).send({ message: "Something went wrong." });
+      res.status(200).send({ message: "Post unliked.", data: doc });
     }
   );
 });
