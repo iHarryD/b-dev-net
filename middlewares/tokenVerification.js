@@ -5,7 +5,7 @@ module.exports = function (req, res, next) {
   if (!token) return res.status(401).send({ message: "Unauthorized!" });
   jwt.verify(token, process.env.TOKEN_SECRET, (err, data) => {
     if (err) return res.status(401).send({ message: "Unauthorized!" });
-    req.user = data.user;
+    req.user = data.username;
     next();
   });
 };
