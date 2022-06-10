@@ -6,7 +6,7 @@ const posts = require("../models/PostModel");
 router.get("/posts/get-all", (req, res) => {
   posts.find((err, doc) => {
     if (err) return res.status(500).send({ message: "Something went wrong." });
-    res.status(200).send(doc);
+    res.status(200).send({ message: "All posts fetched.", data: doc });
   });
 });
 
@@ -22,7 +22,7 @@ router.post("/posts/new", tokenVerification, async (req, res) => {
     await newPost.save();
     res
       .status(200)
-      .send({ message: "Post created successfully.", post: newPost });
+      .send({ message: "Post created successfully.", data: newPost });
   } catch (err) {
     console.log(err);
   }

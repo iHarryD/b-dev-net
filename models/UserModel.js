@@ -13,6 +13,13 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  profilePictureSourceURL: {
+    type: String,
+  },
+  bio: {
+    type: String,
+    max: 100,
+  },
   password: {
     type: String,
     min: 6,

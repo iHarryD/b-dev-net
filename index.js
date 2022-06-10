@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const server = express();
 const authRoutes = require("./api/authRoutes");
 const postRoutes = require("./api/postRoutes");
+const userRoutes = require("./api/userRoutes");
 const cloudinaryRoutes = require("./api/cloudinaryRoutes");
 require("dotenv").config();
 
@@ -13,6 +14,7 @@ server.use(cors());
 server.use(express.json());
 server.use("/api", authRoutes);
 server.use("/api", postRoutes);
+server.use("/api", userRoutes);
 server.use("/api", cloudinaryRoutes);
 
 server.listen(process.env.PORT || 3001);
