@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const comment = require("./CommentModel");
 
 const PostSchema = new mongoose.Schema({
   caption: {
@@ -11,11 +12,18 @@ const PostSchema = new mongoose.Schema({
     max: 3,
   },
   postedBy: {
-    type: String,
+    type: {
+      username: { type: String, required: true },
+      fullName: { type: String, required: true },
+      profilePictureSourceURL: { type: String },
+    },
     required: true,
   },
   likes: {
     type: [String],
+  },
+  comments: {
+    type: [comment],
   },
   uploadedOn: {
     type: Date,
